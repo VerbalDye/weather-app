@@ -1,0 +1,59 @@
+body {
+    font-family: 'M PLUS Rounded 1c', sans-serif;
+}
+
+header {
+    background-image: linear-gradient(90deg, rgb(47, 47, 255),rgb(0, 58, 109));
+    color: white;
+    padding: 25px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+    margin: 20px;
+    border-radius: 20px;
+}
+
+header h1 {
+    font-size: 56px;
+}
+
+.card button {
+    background-image: linear-gradient(90deg, rgb(47, 47, 255),rgb(0, 58, 109) 200%);
+    color:white;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.card button:hover {
+    color:white;
+}
+
+.btn-recent {
+    background-color: rgb(197, 197, 197);
+}
+
+#current-weather {
+    border-radius: 10px;
+    border: black solid 1px;
+    padding:20px;
+    margin-right: 20px;
+}
+
+#current-weather h2 {
+    font-size: 36px;
+}
+
+#current-weather ul {
+    font-size: 24px;
+    list-style: none;
+    margin-bottom: 0;
+}
+
+#current-weather ul li {
+    font-size: 24px;
+    list-style: none;
+    padding: 5px;
+}
+
+#current-weather ul li span{
+    background-color: rgb(69, 184, 54);
+    padding: 0 10px;
+    border-radius: 5px;
+}

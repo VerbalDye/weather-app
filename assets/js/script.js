@@ -94,14 +94,14 @@ var populuteWeather = function (data) {
     currentWeatherEl.appendChild(listEl);
 
     var listEl = document.createElement("li");
-    listEl.textContent = "UV Index: " + data.current.uvi;
+    listEl.innerHTML = "UV Index: <span>" + data.current.uvi + "</span>";
     currentWeatherEl.appendChild(listEl);
 }
 
 var updateLocation = function (currentCity) {
     var cityName = currentCity.locality + ", " + currentCity.region_code + ", " + currentCity.country_code
-
-    cityHeaderEl.textContent = currentCity.locality;
+    var now = dayjs().format("MM/DD/YYYY");
+    cityHeaderEl.textContent = currentCity.locality + " - " + now;
 
     for (var i = 0; i < recents.length; i++) {
         if (recents[i].name == cityName) {
@@ -124,7 +124,7 @@ var getRecents = function () {
     for (var i = 0; i < recents.length; i++) {
         var buttonEl = document.createElement("button");
         buttonEl.textContent = recents[i].name;
-        buttonEl.classList = "btn btn-secondary mt-2 w-100";
+        buttonEl.classList = "btn btn-recent mt-3 p-2 w-100";
         buttonEl.setAttribute("data-index", i);
 
         recentEl.appendChild(buttonEl);
@@ -134,7 +134,8 @@ var getRecents = function () {
 var repeatSearch = function (event) {
     var index = event.target.getAttribute("data-index");
     getWeather(recents[index].lat, recents[index].lon);
-    cityHeaderEl.textContent = recents[index].name.split(",")[0] + " (03/23/2022)";
+    var now = dayjs().format("MM/DD/YYYY");
+    cityHeaderEl.textContent = recents[index].name.split(",")[0] + " - " +now;
 }
 
 var getWindDirection = function (deg) {
@@ -175,4 +176,6 @@ getRecents();
 
 // listens for a submit event on the search box
 addressFormEl.addEventListener("submit", getGeocode);
+
+// listens for a click to the a recent button
 recentEl.addEventListener("click", repeatSearch);
