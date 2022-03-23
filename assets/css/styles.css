@@ -2,6 +2,18 @@ body {
     font-family: 'M PLUS Rounded 1c', sans-serif;
 }
 
+ul {
+    list-style: none;
+    margin-bottom: 0;
+    padding: 0;
+}
+
+ul li {
+    font-size: 18px;
+    list-style: none;
+    padding: 5px;
+}
+
 header {
     background-image: linear-gradient(90deg, rgb(47, 47, 255),rgb(0, 58, 109));
     color: white;
@@ -19,6 +31,7 @@ header h1 {
     background-image: linear-gradient(90deg, rgb(47, 47, 255),rgb(0, 58, 109) 200%);
     color:white;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+    font-size: 24px;
 }
 
 .card button:hover {
@@ -27,6 +40,7 @@ header h1 {
 
 .btn-recent {
     background-color: rgb(197, 197, 197);
+    font-size: 24px;
 }
 
 #current-weather {
@@ -40,20 +54,19 @@ header h1 {
     font-size: 36px;
 }
 
-#current-weather ul {
-    font-size: 24px;
-    list-style: none;
-    margin-bottom: 0;
-}
-
 #current-weather ul li {
     font-size: 24px;
-    list-style: none;
-    padding: 5px;
 }
 
 #current-weather ul li span{
-    background-color: rgb(69, 184, 54);
     padding: 0 10px;
+    border-radius: 5px;
+}
+
+#five-day article {
+    background: rgb(38, 38, 151);
+    color: white;
+    margin: 10px;
+    padding: 5px;
     border-radius: 5px;
 }

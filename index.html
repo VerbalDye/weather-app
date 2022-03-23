@@ -21,19 +21,41 @@
             <div class="m-2 card">
                 <h3 class="card-header">Search for a City:</h3>
                 <form class="card-body" id="address-search">
-                    <input name="address-input" id="address-input" type="text" autofocus="true" class="col-12">
+                    <input name="address-input" id="address-input" type="text" autofocus="true" class="p-2 col-12">
                     <button type="submit" class="btn w-100 mt-2">Search</button>
                 </form>
             </div>
             <div id="recent" class="m-2"></div>
         </div>
-        <div class="col-12 col-sm-7 col-md-8 col-lg-9">
+        <div class="col-12 col-sm-7 col-md-8 col-lg-9 d-none" id="weather-content">
             <section id="current-weather" class="m-2">
                 <h2 id="city-header"></h2>
                 <ul></ul>
             </section>
-            <section>
-
+            <section class="m-2">
+                <h3>5-Day Forecast:</h3>
+                <div class="d-flex justify-content-between" id="five-day">
+                    <article id="day-0">
+                        <h4></h4>
+                        <ul></ul>
+                    </article>
+                    <article id="day-1">
+                        <h4></h4>
+                        <ul></ul>
+                    </article>
+                    <article id="day-2">
+                        <h4></h4>
+                        <ul></ul>
+                    </article>
+                    <article id="day-3">
+                        <h4></h4>
+                        <ul></ul>
+                    </article>
+                    <article id="day-4">
+                        <h4></h4>
+                        <ul></ul>
+                    </article>
+                </div>
             </section>
         </div>
     </main>

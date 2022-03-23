@@ -7,6 +7,7 @@ var addressInputEl = document.querySelector("#address-input");
 var cityHeaderEl = document.querySelector("#city-header");
 var recentEl = document.querySelector("#recent");
 var currentWeatherEl = document.querySelector("#current-weather ul");
+var hiddenEl = document.querySelector("#weather-content");
 
 // creates the recents array and variable
 if (localStorage.getItem("recents")) {
@@ -66,7 +67,9 @@ var getWeather = function (lat, lon) {
     fetch(weatherApi).then(function (response) {
         if (response.ok) {
             response.json().then(function (data) {
-                populuteWeather(data);
+                hiddenEl.classList.remove("d-none");
+                populuteCurrentWeather(data);
+                populuteFiveDay(data);
             })
         } else {
             alert("Something went wrong. \n" + response.status + ": " + response.statusText);
@@ -77,101 +80,149 @@ var getWeather = function (lat, lon) {
     })
 }
 
-var populuteWeather = function (data) {
+// creates all the elements in the 
+var populuteCurrentWeather = function (data) {
     console.log(data);
+
+    // empties out the elements
     currentWeatherEl.textContent = "";
 
-    var listEl = document.createElement("li");
-    listEl.textContent = "Temp: " + data.current.temp + "°F";
-    currentWeatherEl.appendChild(listEl);
-
-    var listEl = document.createElement("li");
-    listEl.textContent = "Wind: " + data.current.wind_speed + "MPH " + getWindDirection(data.current.wind_deg);
-    currentWeatherEl.appendChild(listEl);
-
-    var listEl = document.createElement("li");
-    listEl.textContent = "Humidity: " + data.current.humidity;
-    currentWeatherEl.appendChild(listEl);
-
-    var listEl = document.createElement("li");
-    listEl.innerHTML = "UV Index: <span>" + data.current.uvi + "</span>";
-    currentWeatherEl.appendChild(listEl);
+    // create the different list elements
+    createListElement(currentWeatherEl, "Temp: " + data.current.temp + "°F");
+    createListElement(currentWeatherEl, "Wind: " + data.current.wind_speed + "MPH " + getWindDirection(data.current.wind_deg));
+    createListElement(currentWeatherEl, "Humidity: " + data.current.humidity);
+    createListElement(currentWeatherEl, 'UV Index: <span style="background:' + getUV(data.current.uvi) + ';">' + data.current.uvi + '</span>');
 }
 
+var populuteFiveDay = function (data) {
+
+    for (var i = 0; i < 5; i++) {
+        var dayListEl = document.querySelector("#day-" + i + " ul");
+        var dayheaderEl = document.querySelector("#day-" + i + " h4")
+        dayListEl.textContent = "";
+        var now = dayjs().add(i + 1, "day").format("MM/DD/YYYY");
+        dayheaderEl.textContent = now;
+        createListElement(dayListEl, "Temp: " + data.daily[i].temp.day + "°F");
+        createListElement(dayListEl, "Wind: " + data.daily[i].wind_speed + "MPH " + getWindDirection(data.current.wind_deg));
+        createListElement(dayListEl, "Humidity: " + data.daily[i].humidity);
+    }
+}
+
+// condenses code I would have repeated a lot
+// creates a new list element fills it with the text/ html then appends to parent
+var createListElement = function (parent, htmlContent) {
+    var listEl = document.createElement("li");
+    listEl.innerHTML = htmlContent;
+    parent.appendChild(listEl);
+}
+
+// called from geocode API
 var updateLocation = function (currentCity) {
-    var cityName = currentCity.locality + ", " + currentCity.region_code + ", " + currentCity.country_code
+
+    // turns data from API into a coheirent address
+    var cityName = currentCity.locality + ", " + currentCity.region_code + ", " + currentCity.country_code;
+
+    // gets date and assignes it with the city name
     var now = dayjs().format("MM/DD/YYYY");
     cityHeaderEl.textContent = currentCity.locality + " - " + now;
 
+    // if city already exists this aborts the function before it is written twice
     for (var i = 0; i < recents.length; i++) {
         if (recents[i].name == cityName) {
             return;
         }
     }
 
-    recents.push({
+    // pushes newest location to the front of array and stores locally
+    recents.unshift({
         name: cityName,
         lat: currentCity.latitude,
         lon: currentCity.longitude
     });
     localStorage.setItem("recents", JSON.stringify(recents));
+
+    // calls an update for the newest additions to the array
     getRecents();
 }
 
+// generates the recent button
 var getRecents = function () {
+
+    // clears it first
     recentEl.textContent = "";
 
+    // loops through the list of previous locations
     for (var i = 0; i < recents.length; i++) {
         var buttonEl = document.createElement("button");
         buttonEl.textContent = recents[i].name;
-        buttonEl.classList = "btn btn-recent mt-3 p-2 w-100";
+        buttonEl.classList = "btn btn-recent mt-3 p-2 w-100 ";
         buttonEl.setAttribute("data-index", i);
 
         recentEl.appendChild(buttonEl);
     }
 };
 
+// after the user click a recent button this is run
 var repeatSearch = function (event) {
+
+    // gets the index of the array from the button's data element
     var index = event.target.getAttribute("data-index");
+
+    // finds the location data and send it to weather API
     getWeather(recents[index].lat, recents[index].lon);
+
+    // get the date
     var now = dayjs().format("MM/DD/YYYY");
-    cityHeaderEl.textContent = recents[index].name.split(",")[0] + " - " +now;
+
+    // sets the header witht the city name and the date
+    cityHeaderEl.textContent = recents[index].name.split(",")[0] + " - " + now;
 }
 
+// script to determine wind direction from degrees
 var getWindDirection = function (deg) {
+
+    // reduces the possibility space from 360 to 8
     var directionNum = Math.round((deg / 45));
-    var direction = ""
+
+    // switch case converts number to directional text 
     switch (directionNum) {
         case 0:
-            direction = "N";
-            break;
+            return "N";
         case 1:
-            direction = "NE";
-            break;
+            return "NE";
         case 2:
-            direction = "E";
-            break;
+            return "E";
         case 3:
-            direction = "SE";
-            break;
+            return "SE";
         case 4:
-            direction = "S";
-            break;
+            return "S";
         case 5:
-            direction = "SW";
-            break;
+            return "SW";
         case 6:
-            direction = "W";
-            break;
+            return "W";
         case 7:
-            direction = "NW";
-            break;
+            return "NW";
         case 8:
-            direction = "N";
+            return "N";
     }
-    return direction;
 }
 
+// simple function to determine UV severity
+var getUV = function (UV) {
+    if (UV <= 2) {
+        return "rgb(69,184,54)";
+    } else if (UV <= 5) {
+        return "rgb(243,239,18)";
+    } else if (UV <= 7) {
+        return "rgb(243,153,18)";
+    } else if (UV <= 10) {
+        return "rgb(216,38,38)";
+    } else {
+        return "rgb(174,33,255)";
+    }
+}
+
+// calls the recents once upon load
 getRecents();
 
 // listens for a submit event on the search box
