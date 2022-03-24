@@ -50,8 +50,18 @@ header h1 {
     margin-right: 20px;
 }
 
+#current-weather .city-header-div {
+    background-image: linear-gradient(90deg, rgb(47, 47, 255),rgb(0, 58, 109));
+    padding: 5px 15px;
+    border-radius: 5px;
+    color: white;
+
+}
+
 #current-weather h2 {
     font-size: 36px;
+    margin-bottom: 0;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
 }
 
 #current-weather ul li {
@@ -64,9 +74,23 @@ header h1 {
 }
 
 #five-day article {
-    background: rgb(38, 38, 151);
+    background-image: linear-gradient(90deg, rgb(47, 47, 255),rgb(0, 58, 109) 200%);
     color: white;
     margin: 10px;
     padding: 5px;
     border-radius: 5px;
+}
+
+#five-day article h4 {
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+#five-day article li {
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+@media screen and (max-width: 575px) {
+    .five-day {
+        width: 100%;
+    }
 }

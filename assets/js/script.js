@@ -5,9 +5,11 @@
 var addressFormEl = document.querySelector("#address-search");
 var addressInputEl = document.querySelector("#address-input");
 var cityHeaderEl = document.querySelector("#city-header");
+var currentIcon = document.querySelector("#current-icon");
 var recentEl = document.querySelector("#recent");
 var currentWeatherEl = document.querySelector("#current-weather ul");
 var hiddenEl = document.querySelector("#weather-content");
+var currentIcon = document.querySelector("#current-icon");
 
 // creates the recents array and variable
 if (localStorage.getItem("recents")) {
@@ -80,6 +82,10 @@ var getWeather = function (lat, lon) {
     })
 }
 
+var getWeatherIcon = function (iconId, imageEl) {    
+    imageEl.src = "http://openweathermap.org/img/wn/" + iconId + ".png";
+}
+
 // creates all the elements in the 
 var populuteCurrentWeather = function (data) {
     console.log(data);
@@ -87,10 +93,13 @@ var populuteCurrentWeather = function (data) {
     // empties out the elements
     currentWeatherEl.textContent = "";
 
+
+    getWeatherIcon(data.current.weather[0].icon, currentIcon);
+
     // create the different list elements
     createListElement(currentWeatherEl, "Temp: " + data.current.temp + "°F");
     createListElement(currentWeatherEl, "Wind: " + data.current.wind_speed + "MPH " + getWindDirection(data.current.wind_deg));
-    createListElement(currentWeatherEl, "Humidity: " + data.current.humidity);
+    createListElement(currentWeatherEl, "Humidity: " + data.current.humidity + "%");
     createListElement(currentWeatherEl, 'UV Index: <span style="background:' + getUV(data.current.uvi) + ';">' + data.current.uvi + '</span>');
 }
 
@@ -102,9 +111,12 @@ var populuteFiveDay = function (data) {
         dayListEl.textContent = "";
         var now = dayjs().add(i + 1, "day").format("MM/DD/YYYY");
         dayheaderEl.textContent = now;
+        var imgEl = document.createElement('img');
+        getWeatherIcon(data.daily[i].weather[0].icon, imgEl);
+        dayListEl.appendChild(imgEl);
         createListElement(dayListEl, "Temp: " + data.daily[i].temp.day + "°F");
         createListElement(dayListEl, "Wind: " + data.daily[i].wind_speed + "MPH " + getWindDirection(data.current.wind_deg));
-        createListElement(dayListEl, "Humidity: " + data.daily[i].humidity);
+        createListElement(dayListEl, "Humidity: " + data.daily[i].humidity + "%");
     }
 }
 
@@ -118,9 +130,14 @@ var createListElement = function (parent, htmlContent) {
 
 // called from geocode API
 var updateLocation = function (currentCity) {
-
+    console.log(currentCity);
     // turns data from API into a coheirent address
-    var cityName = currentCity.locality + ", " + currentCity.region_code + ", " + currentCity.country_code;
+    var cityName = ""
+    if (currentCity.locality) {cityName = currentCity.locality}
+    if (currentCity.region_code && cityName) {cityName += ", " + currentCity.region_code}
+    else {cityName = currentCity.region};
+    if (cityName) {cityName += ", " + currentCity.country_code}
+    else {cityName = currentCity.country}
 
     // gets date and assignes it with the city name
     var now = dayjs().format("MM/DD/YYYY");
@@ -139,6 +156,9 @@ var updateLocation = function (currentCity) {
         lat: currentCity.latitude,
         lon: currentCity.longitude
     });
+    if (recents.length > 5) {
+        recents.pop();
+    }
     localStorage.setItem("recents", JSON.stringify(recents));
 
     // calls an update for the newest additions to the array
