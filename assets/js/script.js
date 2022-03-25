@@ -141,7 +141,7 @@ var updateLocation = function (currentCity) {
 
     // gets date and assignes it with the city name
     var now = dayjs().format("MM/DD/YYYY");
-    cityHeaderEl.textContent = currentCity.locality + " - " + now;
+    cityHeaderEl.textContent = cityName.split(",")[0] + " - " + now;
 
     // if city already exists this aborts the function before it is written twice
     for (var i = 0; i < recents.length; i++) {
