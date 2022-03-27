@@ -28,7 +28,7 @@ var getGeocode = function (event) {
     addressInputEl.value = "";
 
     // defines the geoCode API URL
-    var geoCodingApi = "https://api.positionstack.com/v1/forward?access_key=a3952689065efd3f68b8527f047a37cb&query=" + searchTerm;
+    var geoCodingApi = "http://api.positionstack.com/v1/forward?access_key=a3952689065efd3f68b8527f047a37cb&query=" + searchTerm;
 
     // calls the API
     fetch(geoCodingApi).then(function (response) {
